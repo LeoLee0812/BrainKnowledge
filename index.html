@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrainKnowledge — 大脑知识库</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Noto+Serif+SC:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0b0f18;
+  --sidebar:  #101520;
+  --card:     #161d2e;
+  --card-bd:  rgba(255,255,255,0.06);
+  --text:     #ddd6c8;
+  --muted:    #7a8499;
+  --gold:     #e8a74c;
+  --gold-dim: rgba(232,167,76,0.12);
+  --blue:     #7dd3fc;
+  --green:    #86efac;
+  --purple:   #c4b5fd;
+  --sidebar-w: 280px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', 'Noto Serif SC', serif;
+  min-height: 100vh;
+  display: flex;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
+  min-height: 100vh;
+  background: var(--sidebar);
+  border-right: 1px solid var(--card-bd);
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-brand {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid var(--card-bd);
+}
+
+.brand-label {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--gold);
+  text-transform: uppercase;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.brand-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: #f0ece3;
+  line-height: 1.2;
+}
+
+.brand-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.search-wrap {
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid var(--card-bd);
+}
+
+.search-input {
+  width: 100%;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--card-bd);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 13px;
+  padding: 9px 12px;
+  font-family: 'Noto Serif SC', serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.search-input::placeholder { color: var(--muted); }
+.search-input:focus { border-color: var(--gold); }
+
+.nav-count {
+  padding: 10px 18px 6px;
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.05em;
+}
+
+.nav-list {
+  list-style: none;
+  overflow-y: auto;
+  flex: 1;
+  padding: 4px 0 20px;
+}
+
+.nav-list::-webkit-scrollbar { width: 4px; }
+.nav-list::-webkit-scrollbar-track { background: transparent; }
+.nav-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+
+.nav-link {
+  display: block;
+  padding: 10px 20px;
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  font-family: 'Noto Serif SC', serif;
+  border-left: 2px solid transparent;
+  transition: all 0.18s;
+  line-height: 1.4;
+  cursor: pointer;
+}
+.nav-link:hover, .nav-link.active {
+  color: var(--gold);
+  border-left-color: var(--gold);
+  background: var(--gold-dim);
+}
+
+/* ── MAIN ── */
+.main {
+  margin-left: var(--sidebar-w);
+  flex: 1;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 欢迎页 */
+.welcome {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 48px;
+  text-align: center;
+}
+
+.welcome-icon {
+  font-size: 56px;
+  margin-bottom: 24px;
+  opacity: 0.6;
+}
+
+.welcome h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px;
+  color: #f0ece3;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+
+.welcome p {
+  color: var(--muted);
+  font-size: 15px;
+  font-family: 'Noto Serif SC', serif;
+  line-height: 1.8;
+}
+
+.welcome-stats {
+  display: flex;
+  gap: 32px;
+  margin-top: 36px;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  color: var(--gold);
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  margin-top: 4px;
+}
+
+/* 文章页 */
+.article-page {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+}
+
+.article-page.visible {
+  display: flex;
+}
+
+.article-header {
+  padding: 40px 52px 28px;
+  border-bottom: 1px solid var(--card-bd);
+  background: rgba(255,255,255,0.01);
+}
+
+.article-date {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-family: 'DM Sans', sans-serif;
+  margin-bottom: 12px;
+}
+
+.article-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  color: #f0ece3;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.article-body {
+  padding: 40px 52px 80px;
+  flex: 1;
+  overflow-y: auto;
+  max-width: 820px;
+}
+
+/* Markdown 渲染样式 */
+.article-body h1 { display: none; }
+
+.article-body h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: var(--gold);
+  margin: 36px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--gold-dim);
+  font-weight: 700;
+}
+
+.article-body h2:first-of-type {
+  margin-top: 0;
+}
+
+.article-body h3 {
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  margin: 22px 0 10px;
+}
+
+.article-body p {
+  font-size: 14.5px;
+  line-height: 1.85;
+  color: var(--text);
+  margin-bottom: 14px;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.article-body ul, .article-body ol {
+  padding-left: 20px;
+  margin-bottom: 14px;
+}
+
+.article-body li {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text);
+  font-family: 'Noto Serif SC', serif;
+  margin-bottom: 4px;
+}
+
+.article-body strong {
+  color: #f0ece3;
+  font-weight: 600;
+}
+
+.article-body em {
+  color: var(--blue);
+  font-style: italic;
+}
+
+.article-body blockquote {
+  border-left: 3px solid var(--gold);
+  padding: 10px 16px;
+  margin: 16px 0;
+  background: var(--gold-dim);
+  border-radius: 0 8px 8px 0;
+}
+
+.article-body blockquote p {
+  color: rgba(232,167,76,0.9);
+  font-size: 13.5px;
+  margin: 0;
+}
+
+.article-body code {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--card-bd);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 12.5px;
+  color: var(--green);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+.article-body pre {
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--card-bd);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin: 16px 0;
+  overflow-x: auto;
+}
+
+.article-body pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.article-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13.5px;
+  font-family: 'Noto Serif SC', serif;
+}
+
+.article-body th {
+  background: rgba(232,167,76,0.1);
+  color: var(--gold);
+  font-weight: 600;
+  padding: 10px 14px;
+  border: 1px solid rgba(232,167,76,0.2);
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+}
+
+.article-body td {
+  padding: 9px 14px;
+  border: 1px solid var(--card-bd);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.article-body tr:hover td {
+  background: rgba(255,255,255,0.02);
+}
+
+.article-body hr {
+  border: none;
+  border-top: 1px solid var(--card-bd);
+  margin: 28px 0;
+}
+
+/* 来源区块特殊样式 */
+.article-body ul li:has(a) {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.article-body a {
+  color: var(--blue);
+  text-decoration: none;
+}
+.article-body a:hover {
+  text-decoration: underline;
+}
+
+/* 搜索无结果 */
+.no-result {
+  text-align: center;
+  color: var(--muted);
+  padding: 40px 0;
+  font-family: 'Noto Serif SC', serif;
+  font-size: 13px;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .article-header, .article-body { padding-left: 24px; padding-right: 24px; }
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-label">Brain Knowledge</div>
+    <div class="brand-title">大脑<br>知识库</div>
+    <div class="brand-sub">元认知 · 认知科学 · 神经机制</div>
+  </div>
+  <div class="search-wrap">
+    <input class="search-input" type="text" placeholder="搜索知识点..." id="searchInput">
+  </div>
+  <div class="nav-count" id="navCount">共 2 个知识点</div>
+  <ul class="nav-list" id="navList">
+    <li><a href="#" class="nav-link" data-id="元认知" onclick="showEntry('元认知');return false;">元认知</a></li>
+    <li><a href="#" class="nav-link" data-id="疲劳后多梦与噩梦的神经机制" onclick="showEntry('疲劳后多梦与噩梦的神经机制');return false;">疲劳后多梦与噩梦的神经机制</a></li>
+  </ul>
+</aside>
+
+<main class="main" id="mainArea">
+  <!-- 欢迎页 -->
+  <div class="welcome" id="welcomePage">
+    <div class="welcome-icon">🧠</div>
+    <h1>Brain Knowledge</h1>
+    <p>关于大脑、元认知与认知科学的系统笔记<br>点击左侧知识点开始阅读</p>
+    <div class="welcome-stats">
+      <div class="stat">
+        <div class="stat-num">2</div>
+        <div class="stat-label">知识点</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">持续更新</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 文章展示区 -->
+  <div class="article-page" id="articlePage">
+    <div class="article-header">
+      <div class="article-date" id="articleDate"></div>
+      <h1 class="article-title" id="articleTitle"></h1>
+    </div>
+    <div class="article-body" id="articleBody"></div>
+  </div>
+
+  <div class="no-result" id="noResult">没有找到相关知识点</div>
+</main>
+
+<script>
+const ENTRIES = [{"id": "元认知", "title": "元认知", "date": "2026-04-10", "content": "# 元认知\n\n> 更新时间：2026-04-10\n\n## 定义\n\n元认知（Metacognition）是指个体对自身认知过程的**意识、监控与调控**能力。  \n字面意思是\"关于认知的认知\"（cognition about cognition）。\n\n由心理学家 John Flavell 于 1976 年正式提出，是认知科学和教育心理学的核心概念之一。\n\n## 原理与机制\n\n元认知包含两个核心维度：\n\n### 1. 元认知知识（Metacognitive Knowledge）\n对\"认知本身\"的了解，分为三类：\n- **关于自身的知识**：我擅长什么，弱点在哪里（如\"我记数字很慢\"）\n- **关于任务的知识**：哪类任务更难、更耗资源（如\"同时做两件事会出错\"）\n- **关于策略的知识**：哪种方法对哪类问题有效（如\"记忆新词用间隔重复更好\"）\n\n### 2. 元认知调控（Metacognitive Regulation）\n在执行认知任务时的实时管理，包含三个步骤：\n- **计划（Planning）**：选择策略，分配注意力\n- **监控（Monitoring）**：实时检查自己是否理解、是否偏离目标\n- **评估（Evaluation）**：任务结束后反思效果，调整策略\n\n### 神经基础\n前额叶皮质（Prefrontal Cortex）是元认知的核心脑区，负责自我监控和高阶调控。  \n前扣带皮层（ACC）参与错误检测，是\"元认知监控\"的神经基础。\n\n## 应用场景\n\n| 场景 | 元认知的体现 |\n|------|------------|\n| 学习 | 意识到自己\"以为懂了但其实没懂\"（假性流畅感），调整学习方式 |\n| 考试 | 做题时监控自己的时间分配，跳过卡住的题目 |\n| 阅读 | 读完一段后问自己\"我刚才在读什么\"，发现走神 |\n| 决策 | 在做选择前问\"我是在理性判断，还是被情绪影响了\" |\n| 写作 | 写完后站在读者角度审视自己的表达是否清晰 |\n\n## 相关概念\n\n### 与\"认知\"的区别\n- **认知**：记忆、推理、理解等心理过程本身\n- **元认知**：对这些过程的**觉察和管理**，是更高层次的调控\n\n### 与\"自我反思\"的区别\n- 自我反思更广泛，包含情感、价值观\n- 元认知专指对**思维和学习过程**的反思\n\n### 与\"批判性思维\"的关系\n元认知是批判性思维的基础——你需要先能观察自己的思维，才能评估和改进它。\n\n### 与\"心智化\"（Mentalizing）的区别\n- 心智化：理解**他人**的心理状态\n- 元认知：理解**自己**的认知过程\n\n## 如何提升元认知能力\n\n1. **学后自测**（Retrieval Practice）：不要重读，而是合上书回忆关键点\n2. **费曼技巧**：用自己的话向外行解释，暴露理解盲区\n3. **思维日记**：记录自己的决策过程和反思\n4. **刻意监控**：学习时定期停下来问\"我现在理解了吗？\"\n5. **错题分析**：不只看答案，分析自己当时的错误思路\n\n## 参考来源\n\n- Flavell, J. H., *Metacognitive aspects of problem solving*, in L. B. Resnick (Ed.), The Nature of Intelligence, 1976\n- Flavell, J. H., *Metacognition and cognitive monitoring*, American Psychologist, 34(10), 1979\n- Nelson, T. O. & Narens, L., *Metamemory: A theoretical framework and new findings*, Psychology of Learning and Motivation, 1990\n- Dunlosky, J. & Metcalfe, J., 《Metacognition》, SAGE Publications, 2009\n- Fleming, S. M. & Dolan, R. J., *The neural basis of metacognitive ability*, Philosophical Transactions of the Royal Society B, 2012\n- 斯科特·扬（Scott Young）, 《超级学习者》(Ultralearning), 2019 — 应用元认知于自学场景\n", "filename": "元认知"}, {"id": "疲劳后多梦与噩梦的神经机制", "title": "疲劳后多梦与噩梦的神经机制", "date": "2026-04-10", "content": "# 疲劳后多梦与噩梦的神经机制\n\n> 更新时间：2026-04-10\n\n## 定义\n\n**疲劳后多梦/噩梦**：指经历长时间高强度脑力或体力劳累后，睡眠中出现梦境增多、梦境内容负面（噩梦）频率升高的现象。\n\n核心机制涉及：**REM 睡眠反弹、前额叶抑制功能下降、杏仁核过度激活**三者的联动。\n\n---\n\n## 原理与机制\n\n### 1. REM 睡眠反弹（REM Rebound）\n\n正常睡眠结构中，REM（快速眼动）睡眠占总睡眠约 20–25%，集中在后半段夜晚。\n\n当你白天过度疲劳时，身体处于\"睡眠压力积累\"状态（腺苷 adenosine 大量堆积）。入睡后，身体优先进入深度慢波睡眠（SWS）以修复躯体，但随后会**加长和加深 REM 睡眠**作为补偿——这就是 REM 反弹。\n\n> 梦境主要发生在 REM 阶段，REM 时间越长、越密集 → 梦越多、越清晰、越强烈。\n\n---\n\n### 2. 前额叶皮质（PFC）在 REM 期的\"关机\"效应\n\n这是你问题的核心之一。\n\n**正常清醒状态下**：前额叶皮质（Prefrontal Cortex, PFC）负责：\n- 逻辑判断、现实检验（\"这不可能是真的\"）\n- 情绪调控（抑制杏仁核的过激反应）\n- 批判性思维\n\n**REM 睡眠期间**：PFC 活动**大幅降低**，接近\"离线\"状态。\n\n疲劳叠加 REM 期 PFC 抑制，造成双重削弱：\n- 白天长时间高强度用脑 → PFC 资源耗尽、调控阈值降低\n- 进入 REM 时 PFC 本已离线 → **完全失去对情绪内容的\"过滤\"和\"纠偏\"能力**\n\n结果：梦中的荒诞内容、恐惧情境无法被理性纠正，直接体验为真实威胁。\n\n---\n\n### 3. 杏仁核（Amygdala）的过度激活\n\n杏仁核是大脑的\"情绪报警器\"，专门处理恐惧、威胁、焦虑信号。\n\n**疲劳状态下**：\n- 皮质醇（Cortisol）和去甲肾上腺素（Norepinephrine）水平升高\n- 杏仁核对负面刺激的敏感度增加（低阈值激活）\n- PFC 对杏仁核的自上而下抑制（top-down regulation）减弱\n\n**REM 睡眠期间**：\n- 杏仁核活动**反常升高**（与清醒时相比，REM 期杏仁核活跃度可达 30% 以上）\n- 负责情绪处理的边缘系统（杏仁核、海马、扣带回）主导梦境内容生成\n\n叠加效应：**疲劳 → 杏仁核敏感性↑ + PFC 抑制↓ + REM 反弹延长 = 负面情绪梦境密度大幅上升**\n\n---\n\n### 4. 压力激素的直接作用\n\n长时间劳累会激活 HPA 轴（下丘脑-垂体-肾上腺轴），持续分泌：\n- **皮质醇**：在夜间应维持低水平，但劳累者皮质醇曲线异常，睡眠中仍维持高位 → 扰乱 REM 结构，增加噩梦\n- **去甲肾上腺素（NE）**：REM 期正常情况下 NE 分泌极低（这是 REM 的特征之一）。疲劳/压力导致 NE 系统紊乱，REM 期 NE 异常分泌 → 噩梦频率升高\n\n> Matthew Walker 在研究中指出：REM 睡眠的功能之一是在低 NE 环境下\"重新处理\"白天的情绪记忆，让情感\"去毒化\"。NE 紊乱会破坏这个过程，使情绪记忆以原始恐惧形式在梦中重现。\n\n---\n\n### 5. 记忆巩固与情绪处理的\"副产品\"\n\n海马体在睡眠中向皮质转移白天的记忆（记忆巩固）。劳累时白天摄入的信息量大、情绪事件多，夜间海马\"回放\"任务更重：\n- 压力性/未解决的情绪事件优先被 REM 期处理\n- 这些内容在缺乏 PFC 纠正的情况下，以扭曲、威胁化的形式出现 → 噩梦\n\n---\n\n## 总结机制图\n\n```\n白天长时间疲劳\n     │\n     ├─→ 皮质醇/NE升高 ──────────────────→ 杏仁核敏感性↑\n     │                                          │\n     ├─→ PFC资源耗尽，调控阈值降低              │\n     │                                          │\n     └─→ 睡眠压力积累 → REM反弹（时间↑强度↑）  │\n                │                               │\n                └── REM期 PFC\"离线\" ────────────┘\n                                │\n                         噩梦生成机制激活\n                    （杏仁核主导 + 无PFC过滤）\n```\n\n---\n\n## 应用场景\n\n| 场景 | 表现 |\n|------|------|\n| 高压考试周后 | 梦到考试失败、追赶场景 |\n| 连续加班数天后 | 工作场景反复出现，伴焦虑感 |\n| 长途旅行/时差 | 睡眠结构紊乱，REM 分布异常，梦多且奇异 |\n| 慢性睡眠不足的补觉 | REM 反弹极强，梦境生动甚至出现睡眠瘫痪 |\n| PTSD 患者 | 极端案例：创伤记忆反复在 REM 期以噩梦形式重现（NE 系统严重紊乱）|\n\n---\n\n## 相关概念\n\n### 与\"普通多梦\"的区别\n- 普通多梦：REM 量增加，梦境中性或随机\n- 疲劳后噩梦：杏仁核超激活 + PFC 离线 → 内容定向负面化\n\n### 与\"睡眠瘫痪\"（鬼压床）的关系\n同样是 REM 反弹的产物：REM 期肌肉麻痹（正常保护机制）在意识恢复后仍持续数秒到数分钟，杏仁核的恐惧激活使人产生幻觉（恐惧图像叠加在半清醒状态）。\n\n### 与\"PTSD 噩梦\"的区别\n- PTSD：去甲肾上腺素系统慢性失调，噩梦内容固定复现特定创伤\n- 疲劳噩梦：急性应激下的暂时性神经调控失衡，恢复休息后改善\n\n### 与\"清醒梦\"（Lucid Dream）的关系\n清醒梦需要 PFC 部分\"重新上线\"以产生自我意识。极度疲劳时 PFC 完全抑制，反而**不容易**出现清醒梦，噩梦无从被意识干预。\n\n---\n\n## 如何干预\n\n1. **避免睡前 2 小时高强度用脑**：给 PFC 降温时间\n2. **规律睡眠时间**：防止 REM 反弹过激\n3. **睡前正念/身体扫描**：降低皮质醇和 NE 水平\n4. **意象排练疗法（IRT）**：针对反复噩梦，清醒时重写梦的结局（有循证支持）\n5. **哌唑嗪（Prazosin）**：临床用于 PTSD 噩梦，机制是阻断 NE 受体，改善 REM 质量\n\n---\n\n## 参考来源\n\n- Walker, M., 《Why We Sleep》(我们为什么要睡觉), Scribner, 2017\n- Hobson, J. A. & McCarley, R. W., *The brain as a dream state generator: An activation-synthesis hypothesis of the dream process*, American Journal of Psychiatry, 134(12), 1977\n- Nofzinger, E. A. et al., *Forebrain activation in REM sleep: An FDG PET study*, Brain Research, 770(1-2), 1997\n- van der Helm, E. & Walker, M. P., *Overnight therapy? The role of sleep in emotional brain processing*, Psychological Bulletin, 135(5), 2009\n- Levin, R. & Nielsen, T. A., *Disturbed dreaming, posttraumatic stress disorder, and affect distress*, Psychological Bulletin, 133(3), 2007\n- Germain, A., *Sleep disturbances as the hallmark of PTSD: Where are we now?*, American Journal of Psychiatry, 170(4), 2013\n- Siclari, F. et al., *The neural correlates of dreaming*, Nature Neuroscience, 20(6), 2017\n", "filename": "疲劳后多梦与噩梦的神经机制"}];
+
+const searchInput = document.getElementById('searchInput');
+const navList     = document.getElementById('navList');
+const navCount    = document.getElementById('navCount');
+const noResult    = document.getElementById('noResult');
+const welcomePage = document.getElementById('welcomePage');
+const articlePage = document.getElementById('articlePage');
+const articleDate  = document.getElementById('articleDate');
+const articleTitle = document.getElementById('articleTitle');
+const articleBody  = document.getElementById('articleBody');
+
+let activeId = null;
+
+// marked 配置
+marked.setOptions({ breaks: true, gfm: true });
+
+function showEntry(id) {
+  const entry = ENTRIES.find(e => e.id === id);
+  if (!entry) return;
+  activeId = id;
+
+  welcomePage.style.display = 'none';
+  articlePage.classList.add('visible');
+  noResult.style.display = 'none';
+
+  articleDate.textContent = entry.date ? '更新时间：' + entry.date : '';
+  articleTitle.textContent = entry.title;
+  articleBody.innerHTML = marked.parse(entry.content);
+
+  // 更新导航高亮
+  document.querySelectorAll('.nav-link').forEach(a => {
+    a.classList.toggle('active', a.dataset.id === id);
+  });
+
+  articlePage.scrollTop = 0;
+}
+
+// 搜索过滤
+searchInput.addEventListener('input', () => {
+  const q = searchInput.value.trim().toLowerCase();
+  const items = navList.querySelectorAll('li');
+  let visible = 0;
+  items.forEach(li => {
+    const link = li.querySelector('.nav-link');
+    const title = link.textContent.toLowerCase();
+    const entry = ENTRIES.find(e => e.id === link.dataset.id);
+    const match = !q || title.includes(q) || (entry && entry.content.toLowerCase().includes(q));
+    li.style.display = match ? '' : 'none';
+    if (match) visible++;
+  });
+  navCount.textContent = '共 ' + visible + ' 个知识点';
+  noResult.style.display = (visible === 0 && q) ? 'block' : 'none';
+});
+
+// 默认显示第一条
+if (ENTRIES.length > 0) {
+  showEntry(ENTRIES[0].id);
+}
+</script>
+</body>
+</html>
