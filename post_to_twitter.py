@@ -1,70 +1,74 @@
 #!/usr/bin/env python3
 import json
-import requests
+import re
+import tweepy
 import sys
-import os
 from pathlib import Path
+from urllib.parse import quote
 
 # 读取Twitter凭证
 config_path = Path.home() / '.claude' / 'config' / 'twitter_oauth2.json'
 with open(config_path) as f:
     config = json.load(f)
 
-CLIENT_ID = config['client_id']
-CLIENT_SECRET = config['client_secret']
-
-def get_access_token():
-    """获取Twitter OAuth2访问令牌"""
-    auth_url = "https://api.twitter.com/2/oauth2/token"
-
-    auth = (CLIENT_ID, CLIENT_SECRET)
-    headers = {"Content-Type": "application/x-www-form-urlencoded"}
-    data = {
-        "grant_type": "client_credentials"
-    }
-
-    response = requests.post(auth_url, auth=auth, headers=headers, data=data)
-    response.raise_for_status()
-    return response.json()['access_token']
+CONSUMER_KEY = config['consumer_key']
+CONSUMER_SECRET = config['consumer_secret']
+ACCESS_TOKEN = config['access_token']
+ACCESS_TOKEN_SECRET = config['access_token_secret']
 
 def post_tweet(text):
-    """发送推文"""
-    token = get_access_token()
+    """发送推文（使用 tweepy OAuth 1.0a）"""
+    try:
+        # 初始化客户端
+        client = tweepy.Client(
+            consumer_key=CONSUMER_KEY,
+            consumer_secret=CONSUMER_SECRET,
+            access_token=ACCESS_TOKEN,
+            access_token_secret=ACCESS_TOKEN_SECRET,
+            wait_on_rate_limit=True
+        )
 
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json"
-    }
-
-    data = {"text": text}
-
-    response = requests.post(
-        "https://api.twitter.com/2/tweets",
-        headers=headers,
-        json=data
-    )
-
-    if response.status_code == 201:
-        print(f"✅ 推文已发送: {text[:50]}...")
+        # 发送推文
+        response = client.create_tweet(text=text)
+        tweet_id = response.data['id']
+        print(f"✅ 推文已发送 (ID: {tweet_id}): {text[:50]}...")
         return True
-    else:
-        print(f"❌ 发推失败: {response.status_code} - {response.text}")
+
+    except tweepy.TweepyException as e:
+        print(f"❌ 发推失败: {e}")
         return False
+    except Exception as e:
+        print(f"❌ 错误: {e}")
+        return False
+
+def clean_markdown(text):
+    """去除 Markdown 格式符号"""
+    # 去除粗体 **xxx**
+    text = re.sub(r'\*\*(.+?)\*\*', r'\1', text)
+    # 去除斜体 *xxx*
+    text = re.sub(r'(?<!\*)\*([^*]+?)\*(?!\*)', r'\1', text)
+    # 去除内联代码 `xxx`
+    text = re.sub(r'`([^`]+?)`', r'\1', text)
+    # 去除链接 [xxx](yyy)
+    text = re.sub(r'\[([^\]]+?)\]\([^\)]+?\)', r'\1', text)
+    return text.strip()
 
 def extract_summary(file_path):
     """从Markdown笔记提取摘要"""
     with open(file_path, 'r', encoding='utf-8') as f:
         content = f.read()
 
-    # 提取标题
+    # 提取标题（去除冒号等特殊符号）
     lines = content.split('\n')
     title = lines[0].replace('# ', '').strip()
+    title = clean_markdown(title)
 
-    # 提取定义和背景部分（前150字）
+    # 提取定义和背景部分
     summary_start = content.find('## 定义与背景')
     if summary_start != -1:
         summary_end = content.find('##', summary_start + 1)
-        summary = content[summary_start:summary_end].replace('## 定义与背景\n', '').strip()[:150]
+        summary = content[summary_start:summary_end].replace('## 定义与背景\n', '').strip()
+        summary = clean_markdown(summary)[:120]
     else:
         summary = ''
 
@@ -85,17 +89,20 @@ def main():
 
     title, summary = extract_summary(file_path)
 
-    # 构造推文（Twitter限制280字符）
-    github_url = f"https://github.com/superlls/BrainKnowledge/blob/main/{file_name}"
+    # URL 编码文件名（避免中文 URL 问题）
+    encoded_name = quote(file_name)
+    github_url = f"https://github.com/superlls/BrainKnowledge/blob/main/{encoded_name}"
+
+    # 先试试完整版本
     tweet_text = f"""🧠 新笔记：{title}
 
 {summary}
 
 完整内容: {github_url}"""
 
-    # 确保不超过280字符
+    # 如果超过280字符就缩短
     if len(tweet_text) > 280:
-        summary = summary[:100]  # 缩短摘要
+        summary = summary[:80]
         tweet_text = f"""🧠 {title}
 
 {summary}...
