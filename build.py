@@ -461,6 +461,7 @@ body {{
     <div class="brand-title">大脑<br>知识库</div>
     <div class="brand-sub">元认知 · 认知科学 · 神经机制</div>
   </div>
+  <a href="http://127.0.0.1:8765/brain-3d.html" target="_blank" style="display:block;padding:12px 24px;font-size:13px;color:var(--gold);text-decoration:none;font-family:'Noto Serif SC',serif;border-bottom:1px solid var(--card-bd);background:var(--gold-dim);letter-spacing:0.02em;transition:all .18s;" onmouseover="this.style.background='rgba(232,167,76,0.22)'" onmouseout="this.style.background='var(--gold-dim)'">🧠 3D 大脑图谱 →</a>
   <div class="search-wrap">
     <input class="search-input" type="text" placeholder="搜索知识点..." id="searchInput">
   </div>
