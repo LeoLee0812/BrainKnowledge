@@ -1,0 +1,288 @@
+{
+  "main": {
+    "id": "02aef07ca9855fd9",
+    "type": "split",
+    "children": [
+      {
+        "id": "33bc99b036f9fbef",
+        "type": "split",
+        "children": [
+          {
+            "id": "b4b18b67991cc8e8",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "68e9fafa1668d701",
+                "type": "leaf",
+                "state": {
+                  "type": "empty",
+                  "state": {},
+                  "icon": "lucide-file",
+                  "title": "新标签页"
+                }
+              }
+            ]
+          },
+          {
+            "id": "a0e517f2f4c7f2cd",
+            "type": "tabs",
+            "children": [
+              {
+                "id": "efaaccda6b399198",
+                "type": "leaf",
+                "pinned": true,
+                "state": {
+                  "type": "terminal:terminal",
+                  "state": {
+                    "terminal:terminal": {
+                      "cwd": "/Users/superlls/Desktop/BrainKnowledge",
+                      "focus": false,
+                      "profile": {
+                        "args": [
+                          "--login"
+                        ],
+                        "environment": [],
+                        "executable": "/bin/zsh",
+                        "followTheme": true,
+                        "name": "",
+                        "platforms": {
+                          "darwin": true
+                        },
+                        "pythonExecutable": "python3",
+                        "restoreHistory": false,
+                        "rightClickAction": "copyPaste",
+                        "successExitCodes": [
+                          "0",
+                          "SIGINT",
+                          "SIGTERM"
+                        ],
+                        "terminalOptions": {
+                          "documentOverride": null
+                        },
+                        "type": "integrated",
+                        "useWin32Conhost": true
+                      },
+                      "profileSourceId": "darwinIntegratedDefault",
+                      "serial": null,
+                      "userTitle": ""
+                    }
+                  },
+                  "pinned": true,
+                  "icon": "terminal",
+                  "title": "终端：⠐ Claude Code"
+                }
+              }
+            ]
+          }
+        ],
+        "direction": "horizontal"
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "06b6d6c9b531d419",
+    "type": "split",
+    "children": [
+      {
+        "id": "80d381e135a86546",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "10689d2707c063f7",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "63cc18b987a0be96",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "6dafc3558c2f5608",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 267.5
+  },
+  "right": {
+    "id": "ebdbf8f122cad7ca",
+    "type": "split",
+    "children": [
+      {
+        "id": "80dbd3c6aa7335ed",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "aca55739d0412934",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "2026-06-16.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "2026-06-16 的反向链接列表"
+            }
+          },
+          {
+            "id": "46d54f6d79929db6",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "2026-06-16.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "2026-06-16 的出链列表"
+            }
+          },
+          {
+            "id": "efc7ba4c89722ccf",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "9a42ea2c61517366",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "58ba11a5e68822dd",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "2026-06-16.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "2026-06-16 的大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false,
+      "terminal:Open terminal": false
+    }
+  },
+  "active": "efaaccda6b399198",
+  "lastOpenFiles": [
+    "焦虑与负面偏差/压力性现实解体感.md",
+    "焦虑与负面偏差/挫败感累积与控制感丧失.md",
+    "昼夜节律.md",
+    "社交与情绪/失恋痛苦的神经机制.md",
+    "记忆/心盲与心理意象光谱.md",
+    "未命名.base",
+    "未命名.canvas",
+    "index.md",
+    "记忆/既视感_déjà_vu.md",
+    "最近更新.base",
+    "待补充.base",
+    "多巴胺与成瘾关系图.canvas",
+    "焦虑机制因果图.canvas",
+    "睡眠晨起时间线.canvas",
+    "按神经递质.base",
+    "按脑区.base",
+    "CLAUDE.md",
+    "学习与认知效率/长反馈链路任务切换困难.md",
+    "学习与认知效率/自我实现价值.md",
+    "学习与认知效率/答案锁定效应.md",
+    "学习与认知效率/实践学习与前额叶.md",
+    "学习与认知效率/智商与智力的神经科学.md",
+    "学习与认知效率/排名飞轮与习得性无助.md",
+    "学习与认知效率/学习两小时后效率直线下降.md",
+    "学习与认知效率/反馈延迟与学习动力.md",
+    "学习与认知效率/周一疲劳与认知效率下降的神经机制.md",
+    "学习与认知效率/具体例子加速学习_情境锚定效应.md",
+    "学习与认知效率/儿童色彩探索与混色好奇心.md",
+    "学习与认知效率/元认知.md",
+    "学习与认知效率",
+    "焦虑与负面偏差/迷宫行走让人平静的神经机制.md",
+    "焦虑与负面偏差/舍不得扔东西_损失厌恶与禀赋效应.md",
+    "焦虑与负面偏差/考试后发热与压力激素.md",
+    "焦虑与负面偏差/焦虑逃避循环与身体应激反应.md",
+    "焦虑与负面偏差/为什么大脑会默认先想坏结果.md",
+    "焦虑与负面偏差/焦虑未来与负面偏差.md",
+    "焦虑与负面偏差",
+    "社交与情绪",
+    "记忆",
+    "多巴胺与奖赏",
+    "未命名 4.canvas",
+    "未命名 3.canvas",
+    "未命名 2.canvas",
+    "未命名 1.canvas"
+  ]
+}
