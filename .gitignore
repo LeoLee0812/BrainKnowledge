@@ -1,0 +1,6 @@
+# macOS 系统文件
+.DS_Store
+
+# Obsidian 本机 UI 状态（每台机器不同，不需要同步）
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
