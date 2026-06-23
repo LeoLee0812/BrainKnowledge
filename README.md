@@ -55,3 +55,5 @@
 ---
 
 > 由 Claude Code `/元认知` 命令自动生成并维护
+>
+> GPG 签名已启用，所有 commit 均带 Verified 标记
